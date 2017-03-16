@@ -8,10 +8,11 @@ mvn clean install
 # To run the app
 ##################
 # Prerequisites
-    - Install and configure RabbitMQ (I used v3.6.6)
-            - Start RabbitMQ: sudo /sbin/service rabbitmq-server start
-            - Enable the console with: rabbitmq-plugins enable rabbitmq_management
-            - Check the RabbitMQ console at http://localhost:15672/ with guest / guest
+    - Stop RabbitMQ: sudo /sbin/service rabbitmq-server stop
+    - Start ActiveMQ:
+            - cd /opt/apache-activemq-5.13.3/bin
+            - ./activemq console
+            - check the console at http://localhost:8161/
 
 java -jar target/taskExecutorPauses-1.0.0-SNAPSHOT.jar
 

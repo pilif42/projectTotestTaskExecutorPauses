@@ -17,7 +17,6 @@
         <property name="connectionFactory" ref="connectionFactory" />
         <property name="destinationName" value="Action.Field" />
         <property name="maxConcurrentConsumers" value="${container.threads}" />
-        <property name="concurrentConsumers" value="${container.threads}" />
         <property name="receiveTimeout" value="${container.receiveTimeout}" />
         <property name="recoveryInterval" value="${container.recoveryInterval}" />
         <property name="autoStartup" value="true" />
@@ -33,10 +32,8 @@
 
     <!-- anything sent to this channel is put on the queue Action.InvalidActionInstructions -->
     <int:channel id="actionInstructionXmlInvalid" />
-    <bean id="invalidActionInstructionQueue" class="com.rabbitmq.jms.admin.RMQDestination">
-        <constructor-arg name="destName" value="Action.InvalidActionInstructions"/>
-        <constructor-arg name="isQueue" value="true"/>
-        <constructor-arg name="isTemporary" value="false"/>
+    <bean id="invalidActionInstructionQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="Action.InvalidActionInstructions"/>
     </bean>
     <int-jms:outbound-channel-adapter id="invalidActionInstructionJmsOut" destination="invalidActionInstructionQueue" channel="actionInstructionXmlInvalid"/>
 
@@ -50,10 +47,8 @@
         <property name="contextPath" value="uk.gov.ons.ctp.response.action.message.instruction" />
     </bean>
 
-    <bean id="jmsBackedQueue" class="com.rabbitmq.jms.admin.RMQDestination">
-        <constructor-arg name="destName" value="Action.FieldJmsBackup"/>
-        <constructor-arg name="isQueue" value="true"/>
-        <constructor-arg name="isTemporary" value="false"/>
+    <bean id="jmsBackedQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="Action.FieldJmsBackup"/>
     </bean>
     <!-- To mark the channel as "pollable", set the "message-driven" property to "false" -->
     <int-jms:channel id="actionInstructionTransformed" queue-name="Action.FieldJmsBackup" message-driven="false" />
@@ -63,10 +58,8 @@
 
     <!-- Start of the poller section -->
     <int:channel id="drsGatewayPollerError" />
-    <bean id="drsGatewayPollerErrorQueue" class="com.rabbitmq.jms.admin.RMQDestination">
-        <constructor-arg name="destName" value="Action.DrsGatewayPollerErrors"/>
-        <constructor-arg name="isQueue" value="true"/>
-        <constructor-arg name="isTemporary" value="false"/>
+    <bean id="drsGatewayPollerErrorQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="Action.DrsGatewayPollerErrors"/>
     </bean>
     <int-jms:outbound-channel-adapter id="drsGatewayPollerErrorJmsOut" destination="drsGatewayPollerErrorQueue" channel="drsGatewayPollerError"/>
 

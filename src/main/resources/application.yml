@@ -44,6 +44,11 @@ spring:
   zipkin:
     enabled: false # true is the default to post to a Zipkin server at 9411
 
+redelivery-policy:
+  maxRedeliveries: 3
+  initialRedeliveryDelay: 1000
+  redeliveryDelay: 1000
+
 # logging config here as a reminder as to how to override logback from cmd line
 # ie -Dlogging.level.org.springframework=DEBUG
 logging:
@@ -96,6 +101,7 @@ drs:
     WITHDRAWN: REQUEST_COMPLETED
   login: gateway@ons
   password: theGoodOne
+  prefetch: 10
   ssdActionTypes:
     - FRS
     - HAS
@@ -117,17 +123,10 @@ poller:
   maxMessagesPerPoll: 1
   supportHoursStart:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '0.31'    # ie 00 h 31
-    - '13.38'
+    - '14.51'
     - '21.30'
   supportHoursEnd:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '8.30'
-    - '14.20'   # ie 13 h 30
+    - '18.20'   # ie 13 h 30
     - '23.59'
   supportHoursBuffer: 10  # ie in minutes
-
-rabbitmq:
-  username: guest
-  password: guest
-  host: localhost
-  virtualhost: /
-  queueBrowserReadMax: 10
