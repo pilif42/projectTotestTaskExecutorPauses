@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
-public class KironaTestingEndpoint {
+public class TestingEndpoint {
 
   @Autowired
   private ActionInstructionReceiver actionInstructionReceiver;

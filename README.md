@@ -1,7 +1,7 @@
 ##########
 # To build
 ##########
-mvn clean install -P artifactory-aws
+mvn clean install
 
 
 ##################################################

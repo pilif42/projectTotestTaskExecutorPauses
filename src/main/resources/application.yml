@@ -35,7 +35,7 @@ spring:
     ansi:
       enabled: never
   application:
-    name: ONS Kirona DRS Gateway
+    name: projectTotestTaskExecutorPauses
 
   sleuth:
     sampler:
