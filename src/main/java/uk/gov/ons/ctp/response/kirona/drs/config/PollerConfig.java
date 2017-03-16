@@ -14,11 +14,10 @@ public class PollerConfig {
 
     private int maxMessagesPerPoll;
     private int queueLength;
-    private int supportHoursBuffer;
 
     private long fixedDelay;
     private long initialDelay;
 
-    private List<String> supportHoursStart;
-    private List<String> supportHoursEnd;
+    private int supportHourStart;
+    private int supportHourEnd;
 }

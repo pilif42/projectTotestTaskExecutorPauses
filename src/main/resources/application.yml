@@ -51,60 +51,6 @@ logging:
     org.springframework: error
     uk.gov.ons.ctp: debug
 
-drs:
-  contractSsd: SSD
-  day4Start: 13/04/2017 08:00
-  day4Plans:
-    - C1O331D4E
-    - C1O331D4W
-    - H1SD4-P
-    - H1D4-P
-    - R-SMS4
-    - H2SD4-PWW
-    - H2D4-PWW
-    - H2SD4-PWE
-    - H2D4-PWE
-    - R-SMS4W
-  day10Start: 19/04/2017 08:00
-  day10Plans:
-    - C1O331D10E
-    - C1O331D10W
-    - H1SD10-P
-    - H1D10-P
-    - R-SMS10
-    - H2SD10-PWW
-    - H2D10-PWW
-    - H2SD10-PWE
-    - H2D10-PWE
-    - R-SMS10W
-    - SHOUSING
-    - SHOUSING-SMS
-  fieldEnd: 17/05/2017 21:00
-  finalTaskCompletionStatuses:
-    NOADDRESS: REQUEST_COMPLETED_DEACTIVATE
-    COMMUNAL: REQUEST_COMPLETED_DEACTIVATE
-    DEMOLISHED: REQUEST_COMPLETED_DEACTIVATE
-    DERELICT: REQUEST_COMPLETED_DEACTIVATE
-    DUPLICATE: REQUEST_COMPLETED_DEACTIVATE
-    H_IAC_REQ: REQUEST_COMPLETED
-    NO_ACCESS: REQUEST_COMPLETED_DEACTIVATE
-    NON_RESIDENTIAL: REQUEST_COMPLETED_DEACTIVATE
-    REQUEST_H_QUES: REQUEST_COMPLETED
-    REFUSAL: REQUEST_COMPLETED_DEACTIVATE
-    UNDER_CONST: REQUEST_COMPLETED_DEACTIVATE
-    VACANT: REQUEST_COMPLETED_DEACTIVATE
-    WITHDRAWN: REQUEST_COMPLETED
-  login: gateway@ons
-  password: theGoodOne
-  ssdActionTypes:
-    - FRS
-    - HAS
-    - LCF
-    - SLC
-    - OPN
-    - LFS
-  workerToCancel: 2073
-
 container:
   receiveTimeout: 1000
   recoveryInterval: 5000
@@ -115,15 +61,8 @@ poller:
   fixedRate: false
   initialDelay: 1000
   maxMessagesPerPoll: 1
-  supportHoursStart:  # Quotes below are important otherwise the trailing 0 is removed by Spring
-    - '0.31'    # ie 00 h 31
-    - '13.38'
-    - '21.30'
-  supportHoursEnd:  # Quotes below are important otherwise the trailing 0 is removed by Spring
-    - '8.30'
-    - '14.20'   # ie 13 h 30
-    - '23.59'
-  supportHoursBuffer: 10  # ie in minutes
+  supportHourStart: 14
+  supportHoursEnd: 15
 
 rabbitmq:
   username: guest
