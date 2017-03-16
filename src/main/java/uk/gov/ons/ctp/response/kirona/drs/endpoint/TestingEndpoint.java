@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,9 +61,9 @@ public class TestingEndpoint {
    * @return 201 when ActionInstructions are published successfully.
    */
   @RequestMapping(value = "/kironaTest/loadqueue/{nbAIs}/ai/{nbARs}/ar/valid/{validAI}", method = RequestMethod.POST)
-  public final ResponseEntity<?> loadingActionFieldQueue(@RequestParam(value = "nbAIs") final int nbAIs,
-                                                         @RequestParam(value = "nbARs") final int nbARs,
-                                                         @RequestParam(value = "validAI") final boolean validAI) {
+  public final ResponseEntity<?> loadingActionFieldQueue(@PathVariable(value = "nbAIs") final int nbAIs,
+                                                         @PathVariable(value = "nbARs") final int nbARs,
+                                                         @PathVariable(value = "validAI") final boolean validAI) {
     log.debug("Entering loadingActionFieldQueue ...");
     for (int i = 0; i < nbAIs; i++) {
       instructionPublisher.sendInstructions(buildActionInstruction(nbARs, "HOUSEHOLD", buildBlackpoolAddress(validAI)));
@@ -82,7 +83,7 @@ public class TestingEndpoint {
    * @return 201 when the ActionInstruction is published successfully.
    */
   @RequestMapping(value = "/kironaTest/actionid/{actionid}", method = RequestMethod.POST)
-  public final ResponseEntity<?> testingActionFieldQueue(@RequestParam(value =  "actionid") final int actionId) {
+  public final ResponseEntity<?> testingActionFieldQueue(@PathVariable(value =  "actionid") final int actionId) {
     log.debug("Entering testingActionFieldQueue with actionId {}", actionId);
     ActionRequest[] actionRequestArray = new ActionRequest[1];
     actionRequestArray[0] = buildActionRequest(BigInteger.valueOf(actionId), "HOUSEHOLD",
