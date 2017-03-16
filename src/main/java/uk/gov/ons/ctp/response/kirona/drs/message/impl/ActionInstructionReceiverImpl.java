@@ -65,7 +65,7 @@ public class ActionInstructionReceiverImpl implements ActionInstructionReceiver 
   private void simulateProcessActionRequestsPausingThread(List<ActionRequest> actionRequestList) {
     log.debug("Entering simulateProcessActionRequestsPausingThread...");
     try{
-      Thread.sleep(120000); // ie 2 minutes
+      Thread.sleep(60000); // ie 1 minute
     } catch (InterruptedException e) {
       log.error("Pb pausing thread - msg = {} - cause = {}", e.getMessage(), e.getCause());
     }

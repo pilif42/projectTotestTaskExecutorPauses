@@ -108,7 +108,7 @@ drs:
 container:
   receiveTimeout: 1000
   recoveryInterval: 5000
-  threads: 5
+  threads: 1
 
 poller:
   fixedDelay: 100
@@ -117,13 +117,13 @@ poller:
   maxMessagesPerPoll: 1
   supportHoursStart:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '0.31'    # ie 00 h 31
-    - '11.30'
+    - '12.25'
     - '21.30'
   supportHoursEnd:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '8.30'
     - '13.30'   # ie 13 h 30
     - '23.59'
-  supportHoursBuffer: 30  # ie in minutes
+  supportHoursBuffer: 10  # ie in minutes
 
 rabbitmq:
   username: guest
