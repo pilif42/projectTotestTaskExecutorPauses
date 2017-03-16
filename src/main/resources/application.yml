@@ -1,0 +1,133 @@
+info:
+  contactEmail: philippe.brossier@ons.gov.uk
+  version: ${project.version}
+  commit: ${buildNumber}
+  branch: ${scmBranch}
+  buildTime: ${timestamp}
+
+security:
+  basic:
+    enabled: false
+  user:
+    name: gateway
+    password: ctp
+
+management:
+  port: 8231
+  context-path: /mgmt
+  security:
+    role: SUPERUSER
+    enabled: true
+  health:
+    rabbit:
+      enabled: false
+
+server:
+  port: 8131
+  servlet-path: /
+
+endpoints:
+  enabled: true
+  sensitive: true
+
+spring:
+  output:
+    ansi:
+      enabled: never
+  application:
+    name: ONS Kirona DRS Gateway
+
+  sleuth:
+    sampler:
+      percentage: 1
+
+  zipkin:
+    enabled: false # true is the default to post to a Zipkin server at 9411
+
+# logging config here as a reminder as to how to override logback from cmd line
+# ie -Dlogging.level.org.springframework=DEBUG
+logging:
+  level:
+    org.springframework: error
+    uk.gov.ons.ctp: debug
+
+drs:
+  contractSsd: SSD
+  day4Start: 13/04/2017 08:00
+  day4Plans:
+    - C1O331D4E
+    - C1O331D4W
+    - H1SD4-P
+    - H1D4-P
+    - R-SMS4
+    - H2SD4-PWW
+    - H2D4-PWW
+    - H2SD4-PWE
+    - H2D4-PWE
+    - R-SMS4W
+  day10Start: 19/04/2017 08:00
+  day10Plans:
+    - C1O331D10E
+    - C1O331D10W
+    - H1SD10-P
+    - H1D10-P
+    - R-SMS10
+    - H2SD10-PWW
+    - H2D10-PWW
+    - H2SD10-PWE
+    - H2D10-PWE
+    - R-SMS10W
+    - SHOUSING
+    - SHOUSING-SMS
+  fieldEnd: 17/05/2017 21:00
+  finalTaskCompletionStatuses:
+    NOADDRESS: REQUEST_COMPLETED_DEACTIVATE
+    COMMUNAL: REQUEST_COMPLETED_DEACTIVATE
+    DEMOLISHED: REQUEST_COMPLETED_DEACTIVATE
+    DERELICT: REQUEST_COMPLETED_DEACTIVATE
+    DUPLICATE: REQUEST_COMPLETED_DEACTIVATE
+    H_IAC_REQ: REQUEST_COMPLETED
+    NO_ACCESS: REQUEST_COMPLETED_DEACTIVATE
+    NON_RESIDENTIAL: REQUEST_COMPLETED_DEACTIVATE
+    REQUEST_H_QUES: REQUEST_COMPLETED
+    REFUSAL: REQUEST_COMPLETED_DEACTIVATE
+    UNDER_CONST: REQUEST_COMPLETED_DEACTIVATE
+    VACANT: REQUEST_COMPLETED_DEACTIVATE
+    WITHDRAWN: REQUEST_COMPLETED
+  login: gateway@ons
+  password: theGoodOne
+  ssdActionTypes:
+    - FRS
+    - HAS
+    - LCF
+    - SLC
+    - OPN
+    - LFS
+  workerToCancel: 2073
+
+container:
+  receiveTimeout: 1000
+  recoveryInterval: 5000
+  threads: 5
+
+poller:
+  fixedDelay: 100
+  fixedRate: false
+  initialDelay: 1000
+  maxMessagesPerPoll: 1
+  supportHoursStart:  # Quotes below are important otherwise the trailing 0 is removed by Spring
+    - '0.31'    # ie 00 h 31
+    - '12.30'
+    - '21.30'
+  supportHoursEnd:  # Quotes below are important otherwise the trailing 0 is removed by Spring
+    - '8.30'
+    - '13.30'   # ie 13 h 30
+    - '23.59'
+  supportHoursBuffer: 30  # ie in minutes
+
+rabbitmq:
+  username: guest
+  password: guest
+  host: localhost
+  virtualhost: /
+  queueBrowserReadMax: 10
