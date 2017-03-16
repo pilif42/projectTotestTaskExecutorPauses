@@ -2,14 +2,21 @@ package uk.gov.ons.ctp.response.kirona.drs.endpoint;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.ons.ctp.common.error.CTPException;
-import uk.gov.ons.ctp.response.action.message.instruction.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import uk.gov.ons.ctp.response.action.message.instruction.ActionAddress;
+import uk.gov.ons.ctp.response.action.message.instruction.ActionEvent;
+import uk.gov.ons.ctp.response.action.message.instruction.ActionInstruction;
+import uk.gov.ons.ctp.response.action.message.instruction.ActionRequest;
+import uk.gov.ons.ctp.response.action.message.instruction.ActionRequests;
+import uk.gov.ons.ctp.response.action.message.instruction.Priority;
 import uk.gov.ons.ctp.response.kirona.drs.message.ActionInstructionReceiver;
 import uk.gov.ons.ctp.response.kirona.drs.message.InstructionPublisher;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,8 +25,7 @@ import java.util.List;
 /**
  * The controller that provides testing endpoints to verify connectivity to Kirona and to create an order in Kirona DRS.
  */
-@Path("/kironaTest")
-@Produces({ MediaType.APPLICATION_JSON })
+@RestController
 @Slf4j
 public class KironaTestingEndpoint {
 
@@ -52,19 +58,17 @@ public class KironaTestingEndpoint {
    * @param nbARs the number of ActionRequests inside each ActionInstruction
    * @param validAI true if we produce valid ActionInstructions
    * @return 201 when ActionInstructions are published successfully.
-   * @throws CTPException when an error occurs.
    */
-  @POST
-  @Path("/loadqueue/{nbAIs}/ai/{nbARs}/ar/valid/{validAI}")
-  public final Response loadingActionFieldQueue(@PathParam("nbAIs") final int nbAIs,
-                                                @PathParam("nbARs") final int nbARs,
-                                                @PathParam("validAI") final boolean validAI) throws CTPException {
+  @RequestMapping(value = "/kironaTest/loadqueue/{nbAIs}/ai/{nbARs}/ar/valid/{validAI}", method = RequestMethod.POST)
+  public final ResponseEntity<?> loadingActionFieldQueue(@RequestParam(value = "nbAIs") final int nbAIs,
+                                                         @RequestParam(value = "nbARs") final int nbARs,
+                                                         @RequestParam(value = "validAI") final boolean validAI) {
     log.debug("Entering loadingActionFieldQueue ...");
     for (int i = 0; i < nbAIs; i++) {
       instructionPublisher.sendInstructions(buildActionInstruction(nbARs, "HOUSEHOLD", buildBlackpoolAddress(validAI)));
     }
 
-    return Response.status(Response.Status.OK).build();
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   /**
@@ -77,9 +81,8 @@ public class KironaTestingEndpoint {
    * @param actionId the actionId for which we want to create an order in Kirona DRS
    * @return 201 when the ActionInstruction is published successfully.
    */
-  @POST
-  @Path("/actionid/{actionid}")
-  public final Response testingActionFieldQueue(@PathParam("actionid") final int actionId) throws CTPException {
+  @RequestMapping(value = "/kironaTest/actionid/{actionid}", method = RequestMethod.POST)
+  public final ResponseEntity<?> testingActionFieldQueue(@RequestParam(value =  "actionid") final int actionId) {
     log.debug("Entering testingActionFieldQueue with actionId {}", actionId);
     ActionRequest[] actionRequestArray = new ActionRequest[1];
     actionRequestArray[0] = buildActionRequest(BigInteger.valueOf(actionId), "HOUSEHOLD",
@@ -90,7 +93,7 @@ public class KironaTestingEndpoint {
 
     actionInstructionReceiver.processInstruction(actionInstruction);
 
-    return Response.status(Response.Status.CREATED).build();
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   private ActionInstruction buildActionInstruction(int numberOfActionRequests, String actionType,

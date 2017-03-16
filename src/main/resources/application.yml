@@ -117,7 +117,7 @@ poller:
   maxMessagesPerPoll: 1
   supportHoursStart:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '0.31'    # ie 00 h 31
-    - '12.30'
+    - '11.30'
     - '21.30'
   supportHoursEnd:  # Quotes below are important otherwise the trailing 0 is removed by Spring
     - '8.30'

@@ -2,8 +2,7 @@ package uk.gov.ons.ctp.response.kirona.drs.message.impl;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.integration.annotation.MessageEndpoint;
@@ -29,7 +28,7 @@ public class ActionInstructionReceiverImpl implements ActionInstructionReceiver 
   private static final String EXCEPTION_DATA_VALIDATION = "Data validation failed";
   private static final String PROCESS_INSTRUCTION = "ProcessingInstruction";
 
-  @Inject
+  @Autowired
   private Tracer tracer;
 
   /**

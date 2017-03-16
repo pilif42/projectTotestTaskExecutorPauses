@@ -47,11 +47,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>uk.gov.ons.ctp.product</groupId>
-            <artifactId>actionsvc-api</artifactId>
-            <version>9.34.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zipkin</artifactId>
         </dependency>
@@ -114,6 +109,11 @@
             <artifactId>rabbitmq-jms</artifactId>
             <version>1.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.codesup.util</groupId>
+            <artifactId>jaxb2-rich-contract-plugin</artifactId>
+            <version>1.15.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -133,12 +133,6 @@
                 <version>${springboot.version}</version>
                 <configuration>
                     <executable>true</executable>
-                    <requiresUnpack>
-                        <dependency>
-                            <groupId>uk.gov.ons.ctp.product</groupId>
-                            <artifactId>actionsvc-api</artifactId>
-                        </dependency>
-                    </requiresUnpack>
                     <mainClass>uk.gov.ons.ctp.response.kirona.drs.GatewayApplication</mainClass>
                 </configuration>
                 <executions>
@@ -192,6 +186,92 @@
                         <item>timestamp</item>
                     </items>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.13.1</version>
+
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <id>inbound</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <bindingDirectory>src/main/resources/xsd</bindingDirectory>
+                            <bindingIncludes>
+                                <include>actionFeedback.xjb</include>
+                            </bindingIncludes>
+                            <bindingExcludes>
+                                <include>actionInstruction.xjb</include>
+                            </bindingExcludes>
+                            <schemaDirectory>src/main/resources/xsd</schemaDirectory>
+                            <schemaIncludes>
+                                <include>actionFeedback.xsd</include>
+                            </schemaIncludes>
+                            <generateDirectory>${project.build.directory}/generated-sources/xjc/inbound</generateDirectory>
+                            <args>
+                                <arg>-Xvalue-constructor</arg>
+                                <arg>-Xfluent-builder</arg>
+                                <arg>-generateTools=n</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>net.codesup.util</groupId>
+                                    <artifactId>jaxb2-rich-contract-plugin</artifactId>
+                                    <version>1.15.0</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-value-constructor</artifactId>
+                                    <version>3.0</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <id>outbound</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <bindingDirectory>src/main/resources/xsd</bindingDirectory>
+                            <bindingIncludes>
+                                <include>actionInstruction.xjb</include>
+                            </bindingIncludes>
+                            <bindingExcludes>
+                                <include>actionFeedback.xjb</include>
+                            </bindingExcludes>
+                            <schemaDirectory>src/main/resources/xsd</schemaDirectory>
+                            <schemaIncludes>
+                                <include>actionInstruction.xsd</include>
+                            </schemaIncludes>
+                            <generateDirectory>${project.build.directory}/generated-sources/xjc/outbound</generateDirectory>
+                            <args>
+                                <arg>-Xvalue-constructor</arg>
+                                <arg>-Xfluent-builder</arg>
+                                <arg>-generateTools=n</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>net.codesup.util</groupId>
+                                    <artifactId>jaxb2-rich-contract-plugin</artifactId>
+                                    <version>1.15.0</version>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-value-constructor</artifactId>
+                                    <version>3.0</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 

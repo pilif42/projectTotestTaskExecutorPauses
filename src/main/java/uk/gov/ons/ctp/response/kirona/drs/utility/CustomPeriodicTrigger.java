@@ -2,11 +2,11 @@ package uk.gov.ons.ctp.response.kirona.drs.utility;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
 import uk.gov.ons.ctp.response.kirona.drs.config.PollerConfig;
 
-import javax.inject.Inject;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +21,7 @@ public class CustomPeriodicTrigger implements Trigger {
     private static final String TIME_FORMAT = "%d.%d";
     private static final String TIME_FORMAT_WITH_ZERO = "%d.0%d";
 
-    @Inject
+    @Autowired
     private PollerConfig pollerConfig;
 
     @Override
