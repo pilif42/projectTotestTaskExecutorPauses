@@ -29,20 +29,21 @@ public class CustomPeriodicTriggerTest {
   private CustomPeriodicTrigger customPeriodicTrigger;
 
   private static final int SUPPORT_HOUR_START = 17;
+  private static final int SUPPORT_MINUTE_START = 50;
   private static final int SUPPORT_HOUR_END = 18;
 
   @Before
   public void setup() throws NoSuchMethodException {
     when(pollerConfig.getSupportHourStart()).thenReturn(SUPPORT_HOUR_START);
+    when(pollerConfig.getSupportMinuteStart()).thenReturn(SUPPORT_MINUTE_START);
     when(pollerConfig.getSupportHourEnd()).thenReturn(SUPPORT_HOUR_END);
   }
 
   @Test
-  public void testCurrentHourBetweenZeroAndSupportHourStart() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateBetweenZeroAndSupportStart() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(Calendar.HOUR_OF_DAY, 16);
-    calendar.set(Calendar.MINUTE, 55);
-    calendar.set(Calendar.SECOND, 30);
+    calendar.set(Calendar.HOUR_OF_DAY, 17);
+    calendar.set(Calendar.MINUTE, 40);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
@@ -50,10 +51,10 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
-  public void testCurrentHourBetweenSupportHourStartAndEnd() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateBetweenSupportStartAndEnd() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 17);
-    calendar.set(Calendar.MINUTE, 30);
+    calendar.set(Calendar.MINUTE, 55);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
@@ -65,11 +66,36 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
-  public void testCurrentHourAfterSupportHourEnd() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateAfterSupportEnd() throws IllegalAccessException, InvocationTargetException {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 18);
+    calendar.set(Calendar.MINUTE, 10);
+    Date testedDate = calendar.getTime();
+
+    Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
+    assertNull(activeDate);
+  }
+
+  @Test
+  public void testCurrentDateEqualsSupportStart() throws IllegalAccessException, InvocationTargetException {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 17);
+    calendar.set(Calendar.MINUTE, 50);
+    Date testedDate = calendar.getTime();
+
+    Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
+    assertNotNull(activeDate);
+
+    calendar.setTime(activeDate);
+    assertEquals(pollerConfig.getSupportHourEnd(), calendar.get(Calendar.HOUR_OF_DAY));
+    assertEquals(0, calendar.get(Calendar.MINUTE));
+  }
+
+  @Test
+  public void testCurrentDateEqualsSupportEnd() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 18);
     calendar.set(Calendar.MINUTE, 0);
-    calendar.set(Calendar.SECOND, 10);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);

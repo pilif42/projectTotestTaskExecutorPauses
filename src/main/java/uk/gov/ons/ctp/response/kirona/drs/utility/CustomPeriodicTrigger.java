@@ -10,9 +10,6 @@ import uk.gov.ons.ctp.response.kirona.drs.config.PollerConfig;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * A trigger to meet Kirona DRS needs
- */
 @Slf4j
 @Data
 public class CustomPeriodicTrigger implements Trigger {
@@ -48,7 +45,7 @@ public class CustomPeriodicTrigger implements Trigger {
     }
 
     /**
-     * This returns null if the current date is already active, ie outside of support hours.
+     * This returns null if the current date is active, ie outside of support hours.
      * If the current date is within support hours, it returns the earliest active date.
      *
      * @param date the current date
@@ -58,17 +55,23 @@ public class CustomPeriodicTrigger implements Trigger {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int dateHours = calendar.get(Calendar.HOUR_OF_DAY);
+        int dateMinutes = calendar.get(Calendar.MINUTE);
 
         int supportHourStart = pollerConfig.getSupportHourStart();
+        int supportMinuteStart = pollerConfig.getSupportMinuteStart();
         int supportHourEnd = pollerConfig.getSupportHourEnd();
 
         if (dateHours < supportHourStart || dateHours >= supportHourEnd) {
             return null;
         } else {
-            calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, supportHourEnd);
-            calendar.set(Calendar.MINUTE, 0);
-            return calendar.getTime();
+            if (dateMinutes < supportMinuteStart) {
+                return null;
+            } else {
+                calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, supportHourEnd);
+                calendar.set(Calendar.MINUTE, 0);
+                return calendar.getTime();
+            }
         }
     }
 }

@@ -19,5 +19,6 @@ public class PollerConfig {
     private long initialDelay;
 
     private int supportHourStart;
+    private int supportMinuteStart;
     private int supportHourEnd;
 }

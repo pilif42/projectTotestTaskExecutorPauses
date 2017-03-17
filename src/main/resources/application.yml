@@ -61,8 +61,9 @@ poller:
   fixedRate: false
   initialDelay: 1000
   maxMessagesPerPoll: 1
-  supportHourStart: 14
-  supportHoursEnd: 15
+  supportHourStart: 17
+  supportMinuteStart: 30
+  supportHourEnd: 18
 
 rabbitmq:
   username: guest

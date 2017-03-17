@@ -19,10 +19,8 @@ java -jar target/taskExecutorPauses-1.0.0-SNAPSHOT.jar
 ##################################################
 # Notes on the poller configuration
 ##################################################
-As it stands (see application.yml and the poller section), we have defined 3 periods during which we want to stop the processing (ie processInstruction in ActionInstructionReceiverImpl is NOT invoked)
-    - 00h21 to 08h30
-    - 13h28 to 14h20
-    - 21h20 to 23h59
+As it stands (see application.yml and the poller section), we have defined 1 period during which we want to stop the processing (ie processInstruction in ActionInstructionReceiverImpl is NOT invoked)
+    - 17h to 18h
 
 
 ##################################################
