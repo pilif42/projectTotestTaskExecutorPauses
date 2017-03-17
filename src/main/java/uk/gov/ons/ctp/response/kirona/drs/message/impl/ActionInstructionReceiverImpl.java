@@ -2,9 +2,6 @@ package uk.gov.ons.ctp.response.kirona.drs.message.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.integration.annotation.MessageEndpoint;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +21,6 @@ import uk.gov.ons.ctp.response.kirona.drs.message.ActionInstructionReceiver;
 @MessageEndpoint
 public class ActionInstructionReceiverImpl implements ActionInstructionReceiver {
 
-  public static final int SITUATION_MAX_LENGTH = 100;
-  private static final String EXCEPTION_DATA_VALIDATION = "Data validation failed";
-  private static final String PROCESS_INSTRUCTION = "ProcessingInstruction";
-
-  @Autowired
-  private Tracer tracer;
-
   /**
    * To process ActionInstructions from the input channel actionInstructionTransformed
    *
@@ -41,7 +31,6 @@ public class ActionInstructionReceiverImpl implements ActionInstructionReceiver 
   public final void processInstruction(final ActionInstruction instruction) {
     long timeAtEntrance = System.currentTimeMillis();
     log.debug("Entering process for instruction {}", instruction);
-    Span span = tracer.createSpan(PROCESS_INSTRUCTION);
 
     ActionRequests actionRequests = instruction.getActionRequests();
     if (actionRequests != null) {
@@ -51,7 +40,6 @@ public class ActionInstructionReceiverImpl implements ActionInstructionReceiver 
       }
     }
 
-    tracer.close(span);
     long timeAtExit= System.currentTimeMillis();
     log.debug("It took {} milliseconds to process the instruction.", timeAtExit - timeAtEntrance);
   }

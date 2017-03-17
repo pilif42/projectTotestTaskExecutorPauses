@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.ons.ctp.response.action.message.instruction.ActionAddress;
 import uk.gov.ons.ctp.response.action.message.instruction.ActionEvent;
@@ -68,31 +67,6 @@ public class TestingEndpoint {
     for (int i = 0; i < nbAIs; i++) {
       instructionPublisher.sendInstructions(buildActionInstruction(nbARs, "HOUSEHOLD", buildBlackpoolAddress(validAI)));
     }
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
-  }
-
-  /**
-   * Endpoint to process ONE ActionInstruction.
-   *
-   * Note that the ActionInstruction is not put on the queue Action.Field. It is being processed directly by the
-   * ActionInstructionReceiverImpl and an order will be created in Kirona DRS if there is no existing order with primary
-   * order number = the given actionId.
-   *
-   * @param actionId the actionId for which we want to create an order in Kirona DRS
-   * @return 201 when the ActionInstruction is published successfully.
-   */
-  @RequestMapping(value = "/kironaTest/actionid/{actionid}", method = RequestMethod.POST)
-  public final ResponseEntity<?> testingActionFieldQueue(@PathVariable(value =  "actionid") final int actionId) {
-    log.debug("Entering testingActionFieldQueue with actionId {}", actionId);
-    ActionRequest[] actionRequestArray = new ActionRequest[1];
-    actionRequestArray[0] = buildActionRequest(BigInteger.valueOf(actionId), "HOUSEHOLD",
-            buildBlackpoolAddress(true));
-
-    ActionInstruction actionInstruction = new ActionInstruction();
-    actionInstruction.setActionRequests(buildActionRequests(actionRequestArray));
-
-    actionInstructionReceiver.processInstruction(actionInstruction);
 
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
