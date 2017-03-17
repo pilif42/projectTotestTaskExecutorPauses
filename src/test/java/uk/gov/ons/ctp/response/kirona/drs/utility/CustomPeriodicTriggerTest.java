@@ -28,8 +28,8 @@ public class CustomPeriodicTriggerTest {
   @Autowired
   private CustomPeriodicTrigger customPeriodicTrigger;
 
-  private static final int SUPPORT_HOUR_START = 17;
-  private static final int SUPPORT_MINUTE_START = 50;
+  private static final int SUPPORT_HOUR_START = 16;
+  private static final int SUPPORT_MINUTE_START = 20;
   private static final int SUPPORT_HOUR_END = 18;
 
   @Before
@@ -40,10 +40,10 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
-  public void testCurrentDateBetweenZeroAndSupportStart() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateBetweenZeroAndSupportStartScenario1() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(Calendar.HOUR_OF_DAY, 17);
-    calendar.set(Calendar.MINUTE, 40);
+    calendar.set(Calendar.HOUR_OF_DAY, 15);
+    calendar.set(Calendar.MINUTE, 10);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
@@ -51,10 +51,21 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
-  public void testCurrentDateBetweenSupportStartAndEnd() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateBetweenZeroAndSupportStartScenario2() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(Calendar.HOUR_OF_DAY, 17);
-    calendar.set(Calendar.MINUTE, 55);
+    calendar.set(Calendar.HOUR_OF_DAY, 16);
+    calendar.set(Calendar.MINUTE, 10);
+    Date testedDate = calendar.getTime();
+
+    Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
+    assertNull(activeDate);
+  }
+
+  @Test
+  public void testCurrentDateBetweenSupportStartAndEndScenario1() throws IllegalAccessException, InvocationTargetException {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 16);
+    calendar.set(Calendar.MINUTE, 30);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
@@ -66,7 +77,22 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
-  public void testCurrentDateAfterSupportEnd() throws IllegalAccessException, InvocationTargetException {
+  public void testCurrentDateBetweenSupportStartAndEndScenario2() throws IllegalAccessException, InvocationTargetException {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 17);
+    calendar.set(Calendar.MINUTE, 30);
+    Date testedDate = calendar.getTime();
+
+    Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
+    assertNotNull(activeDate);
+
+    calendar.setTime(activeDate);
+    assertEquals(pollerConfig.getSupportHourEnd(), calendar.get(Calendar.HOUR_OF_DAY));
+    assertEquals(0, calendar.get(Calendar.MINUTE));
+  }
+
+  @Test
+  public void testCurrentDateAfterSupportEndScenario1() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 18);
     calendar.set(Calendar.MINUTE, 10);
@@ -77,10 +103,21 @@ public class CustomPeriodicTriggerTest {
   }
 
   @Test
+  public void testCurrentDateAfterSupportEndScenario2() throws IllegalAccessException, InvocationTargetException {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 19);
+    calendar.set(Calendar.MINUTE, 10);
+    Date testedDate = calendar.getTime();
+
+    Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);
+    assertNull(activeDate);
+  }
+
+  @Test
   public void testCurrentDateEqualsSupportStart() throws IllegalAccessException, InvocationTargetException {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(Calendar.HOUR_OF_DAY, 17);
-    calendar.set(Calendar.MINUTE, 50);
+    calendar.set(Calendar.HOUR_OF_DAY, 16);
+    calendar.set(Calendar.MINUTE, 20);
     Date testedDate = calendar.getTime();
 
     Date activeDate = customPeriodicTrigger.provideEarliestActiveDate(testedDate);

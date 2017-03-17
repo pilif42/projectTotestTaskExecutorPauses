@@ -61,17 +61,24 @@ public class CustomPeriodicTrigger implements Trigger {
         int supportMinuteStart = pollerConfig.getSupportMinuteStart();
         int supportHourEnd = pollerConfig.getSupportHourEnd();
 
+        boolean weAreInActivePeriod = false;
         if (dateHours < supportHourStart || dateHours >= supportHourEnd) {
+            weAreInActivePeriod = true;
+        } else {
+            if (dateHours == supportHourStart) {
+                if (dateMinutes < supportMinuteStart) {
+                    weAreInActivePeriod = true;
+                }
+            }
+        }
+
+        if (weAreInActivePeriod) {
             return null;
         } else {
-            if (dateMinutes < supportMinuteStart) {
-                return null;
-            } else {
-                calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, supportHourEnd);
-                calendar.set(Calendar.MINUTE, 0);
-                return calendar.getTime();
-            }
+            calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, supportHourEnd);
+            calendar.set(Calendar.MINUTE, 0);
+            return calendar.getTime();
         }
     }
 }

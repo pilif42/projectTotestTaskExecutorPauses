@@ -35,10 +35,19 @@
     </filter>
   </appender>
 
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/tmp/taskExecutorPauses.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
   <root level="WARN">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="STDERR" />
     <appender-ref ref="SYSLOG" />
+    <appender-ref ref="FILE" />
   </root>
 
 </configuration>

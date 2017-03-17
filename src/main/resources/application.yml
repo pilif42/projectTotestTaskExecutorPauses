@@ -42,6 +42,7 @@ spring:
 logging:
   level:
     org.springframework: error
+    org.springframework.integration: debug
     uk.gov.ons.ctp: debug
 
 container:
@@ -54,8 +55,8 @@ poller:
   fixedRate: false
   initialDelay: 1000
   maxMessagesPerPoll: 1
-  supportHourStart: 11
-  supportMinuteStart: 31
+  supportHourStart: 16
+  supportMinuteStart: 20
   supportHourEnd: 18
 
 rabbitmq:
