@@ -72,46 +72,6 @@ ontainer-1] o.s.i.t.PseudoTransactionManager         : Creating new transaction 
 2017-03-17 16:22:10.297 DEBUG [projectTotestTaskExecutorPauses,,,]  7243 --- [enerContainer-1] o.s.i.t.Pseud
 
 
-Now working thanks to <property name="queueCapacity" value="1" /> in action-instruction-inbound-flow.xml. Only issue left is the ERROR found in the logs. Does it matter?
-2017-03-21 16:22:59.998 DEBUG [projectTotestTaskExecutorPauses,,,]  1566 --- [sk-scheduler-10] u.g.o.c.r.k.d.u.CustomPeriodicTrigger    : earliestActiveDate is null
-2017-03-21 16:22:59.998 DEBUG [projectTotestTaskExecutorPauses,,,]  1566 --- [sk-scheduler-10] u.g.o.c.r.k.d.u.CustomPeriodicTrigger    : result is Tue Mar 21 16:23:00 UTC 2017
-2017-03-21 16:23:00.100 ERROR [projectTotestTaskExecutorPauses,938df56ee8f365b0,938df56ee8f365b0,false]  1566 --- [sk-scheduler-10] o.s.integration.handler.LoggingHandler   : org.springframework.core.task.TaskRejectedException: Executor [java.util.concurrent.ThreadPoolExecutor@28ba4454[Running, pool size = 1, active threads = 1, queued tasks = 1, completed tasks = 2]] did not accept task: org.springframework.integration.util.ErrorHandlingTaskExecutor$1@9a93f99
-	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:296)
-	at org.springframework.integration.util.ErrorHandlingTaskExecutor.execute(ErrorHandlingTaskExecutor.java:51)
-	at org.springframework.integration.endpoint.AbstractPollingEndpoint$Poller.run(AbstractPollingEndpoint.java:344)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at org.springframework.scheduling.concurrent.ReschedulingRunnable.run(ReschedulingRunnable.java:81)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at java.lang.Thread.run(Thread.java:745)
-Caused by: java.util.concurrent.RejectedExecutionException: Task org.springframework.integration.util.ErrorHandlingTaskExecutor$1@9a93f99 rejected from java.util.concurrent.ThreadPoolExecutor@28ba4454[Running, pool size = 1, active threads = 1, queued tasks = 1, completed tasks = 2]
-	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2047)
-	at java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:823)
-	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1369)
-	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:293)
-	... 11 more
-
-2017-03-21 16:23:00.100 ERROR [projectTotestTaskExecutorPauses,938df56ee8f365b0,938df56ee8f365b0,false]  1566 ---
-[sk-scheduler-10] o.s.integration.handler.LoggingHandler   : org.springframework.core.task.TaskRejectedException: Executor [java.util.concurrent.ThreadPoolExecutor@28ba4454[Running, pool size = 1, active threads = 1, queued tasks = 1, completed tasks = 2]] did not accept task: org.springframework.integration.util.ErrorHandlingTaskExecutor$1@9a93f99
-	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:296)
-	at org.springframework.integration.util.ErrorHandlingTaskExecutor.execute(ErrorHandlingTaskExecutor.java:51)
-	at org.springframework.integration.endpoint.AbstractPollingEndpoint$Poller.run(AbstractPollingEndpoint.java:344)
-	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
-	at org.springframework.scheduling.concurrent.ReschedulingRunnable.run(ReschedulingRunnable.java:81)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
-	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at java.lang.Thread.run(Thread.java:745)
-Caused by: java.util.concurrent.RejectedExecutionException: Task org.springframework.integration.util.ErrorHandlingTaskExecutor$1@9a93f99 rejected from java.util.concurrent.ThreadPoolExecutor@28ba4454[Running, pool size = 1, active threads = 1, queued tasks = 1, completed tasks = 2]
-	at java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2047)
-	at java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:823)
-	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1369)
-	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:293)
-	... 11 more
+Now working thanks to (in action-instruction-inbound-flow.xml):
+    - <property name="queueCapacity" value="1" />
+    - <property name="rejectedExecutionHandler" ref="callerRunsPolicy" />

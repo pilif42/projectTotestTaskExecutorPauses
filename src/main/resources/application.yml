@@ -54,7 +54,7 @@ poller:
   fixedRate: false
   initialDelay: 1000
   maxMessagesPerPoll: 1
-  supportHourStart: 16
+  supportHourStart: 10
   supportMinuteStart: 23
   supportHourEnd: 18
 

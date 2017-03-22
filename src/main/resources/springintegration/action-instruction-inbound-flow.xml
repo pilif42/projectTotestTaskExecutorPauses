@@ -72,10 +72,13 @@
 
     <bean id="customPeriodicTrigger" class="uk.gov.ons.ctp.response.kirona.drs.utility.CustomPeriodicTrigger" />
 
+    <bean id="callerRunsPolicy" class= "java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy" />
+
     <bean id="customTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <property name="corePoolSize" value="1" />
         <property name="maxPoolSize" value="1" />
         <property name="queueCapacity" value="1" />
+        <property name="rejectedExecutionHandler" ref="callerRunsPolicy" />
     </bean>
 
     <int:poller id="customPoller" default="true" trigger="customPeriodicTrigger" task-executor="customTaskExecutor" max-messages-per-poll="${poller.maxMessagesPerPoll}" error-channel="drsGatewayPollerError">
